@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SMART Health — Главная</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body onload="loadDashboard()">
+
+    <!-- ================= HEADER ================= -->
+    <header class="header">
+        <div class="logo">SMART Health AI</div>
+
+        <nav class="nav">
+            <button onclick="openProfile()">Личный кабинет</button>
+            <button onclick="openSettings()">Настройки</button>
+            <button onclick="logout()" class="logoutBtn">Выйти</button>
+        </nav>
+    </header>
+
+
+
+    <!-- ================= MAIN BLOCK ================= -->
+    <main class="main">
+        <h2 class="welcome">Добро пожаловать, <span id="userEmail"></span></h2>
+
+        <div class="trackers">
+
+            <!-- ВОДА -->
+            <div class="tracker">
+                <h3>💧 Вода</h3>
+                <p id="waterValue">0</p>
+                <div class="buttons">
+                    <button onclick="changeValue('water', 1)">+</button>
+                    <button onclick="changeValue('water', -1)">-</button>
+                </div>
+            </div>
+
+            <!-- ШАГИ -->
+            <div class="tracker">
+                <h3>👣 Шаги</h3>
+                <p id="stepsValue">0</p>
+                <div class="buttons">
+                    <button onclick="changeValue('steps', 500)">+</button>
+                    <button onclick="changeValue('steps', -500)">-</button>
+                </div>
+            </div>
+
+            <!-- СОН -->
+            <div class="tracker">
+                <h3>😴 Сон (часы)</h3>
+                <p id="sleepValue">0</p>
+                <div class="buttons">
+                    <button onclick="changeValue('sleep', 1)">+</button>
+                    <button onclick="changeValue('sleep', -1)">-</button>
+                </div>
+            </div>
+
+            <!-- ПИТАНИЕ -->
+            <div class="tracker">
+                <h3>🍎 Питание (ккал)</h3>
+                <p id="foodValue">0</p>
+                <div class="buttons">
+                    <button onclick="changeValue('food', 100)">+</button>
+                    <button onclick="changeValue('food', -100)">-</button>
+                </div>
+            </div>
+
+            <!-- ТРЕНИРОВКИ -->
+            <div class="tracker">
+                <h3>🏋️‍♀️ Тренировки (мин.)</h3>
+                <p id="workoutValue">0</p>
+                <div class="buttons">
+                    <button onclick="changeValue('workout', 10)">+</button>
+                    <button onclick="changeValue('workout', -10)">-</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        © 2025 SMART Health AI — All Rights Reserved.
+    </footer>
+
+
+    <script src="app.js"></script>
+</body>
+
+</html>
