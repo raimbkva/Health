@@ -6,6 +6,21 @@ body {
 }
 
 /* === КОНТЕЙНЕРЫ ДЛЯ LOGIN/REGISTER === */
+/* ... (Оставьте старые стили для auth-page, auth-container, input, button) ... */
+
+/* Убедимся, что .container в login/register использует старые стили,
+   так как в index.html используется .main */
+.container {
+    background: white;
+    padding: 25px;
+    width: 330px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin: 100px auto; /* Добавил для центрирования на странице */
+}
+
+/* Переименовал старый .container для страниц входа/регистрации,
+   чтобы он не конфликтовал с другими стилями */
 .auth-page {
     background: #f5f6fa;
     height: 100vh;
@@ -29,6 +44,7 @@ input {
     margin: 7px 0;
     border: 1px solid #ddd;
     border-radius: 8px;
+    box-sizing: border-box; /* Важно, чтобы padding не увеличивал ширину */
 }
 
 button {
@@ -39,6 +55,7 @@ button {
     color: white;
     border-radius: 8px;
     cursor: pointer;
+    transition: background 0.3s;
 }
 
 button:hover {
@@ -96,8 +113,9 @@ button:hover {
 
 .trackers {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Сделал адаптивным */
     gap: 20px;
+    margin-bottom: 40px;
 }
 
 .tracker {
@@ -111,6 +129,7 @@ button:hover {
 .tracker h3 {
     margin: 0;
     margin-bottom: 5px;
+    color: #4b7bec;
 }
 
 .tracker p {
@@ -120,15 +139,107 @@ button:hover {
 }
 
 .buttons button {
-    width: 45px;
+    width: 40px;
     height: 40px;
     background: #4b7bec;
     margin: 0 5px;
     border-radius: 8px;
+    padding: 0;
 }
 
 .buttons button:hover {
     background: #3867d6;
+}
+
+
+/* === НОВЫЕ СТИЛИ ДЛЯ AI-ФУНКЦИЙ === */
+
+.ai-features {
+    background: #e9efff; /* Светло-голубой фон для акцента */
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(75, 123, 236, 0.2);
+    margin-top: 30px;
+}
+
+.ai-features h2 {
+    text-align: center;
+    color: #3867d6;
+    margin-bottom: 20px;
+}
+
+.ai-output, .chat-assistant {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.ai-output h3, .chat-assistant h3 {
+    color: #4b7bec;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+
+#aiRecommendations {
+    font-size: 16px;
+    line-height: 1.5;
+    min-height: 50px; /* Чтобы текст не "прыгал" */
+}
+
+/* Стили для чата */
+.chat-window {
+    height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+
+.chat-message {
+    padding: 8px 12px;
+    border-radius: 15px;
+    margin: 5px 0;
+    max-width: 80%;
+    word-wrap: break-word;
+    font-size: 14px;
+}
+
+.chat-message.user {
+    background: #4b7bec;
+    color: white;
+    margin-left: auto;
+    text-align: right;
+}
+
+.chat-message.ai {
+    background: #dff0d8; /* Светло-зеленый */
+    color: #3c763d;
+    margin-right: auto;
+    text-align: left;
+}
+
+.chat-assistant button {
+    margin-top: 10px;
+    width: auto;
+    padding: 10px 20px;
+    float: right;
+}
+
+.chat-assistant input {
+    width: calc(100% - 100px); /* Уменьшаем, чтобы кнопка поместилась */
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.chat-assistant::after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 /* === FOOTER === */
@@ -139,4 +250,62 @@ button:hover {
     background: #dcdde1;
     color: #333;
     font-size: 14px;
+}
+/* ... (Остальной код style.css остается прежним) ... */
+
+/* === НОВЫЕ СТИЛИ ДЛЯ PROFILE И SETTINGS === */
+
+.profile-container, .settings-container {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.profile-container h3, .settings-container h3 {
+    color: #3867d6;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.profile-container p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.tracker-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+    padding: 15px;
+    background: #f3f6fa;
+    border-radius: 8px;
+}
+
+.tracker-summary p {
+    background: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.settings-button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+}
+
+.delete-button {
+    background: #e74c3c !important;
+}
+
+.delete-button:hover {
+    background: #c0392b !important;
 }

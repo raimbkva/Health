@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SMART Health — Профиль</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body onload="loadProfile()">
+
+    <header class="header">
+        <div class="logo">SMART Health AI</div>
+
+        <nav class="nav">
+            <button onclick="window.location.href='index.html'">Главная</button>
+            <button onclick="openSettings()">Настройки</button>
+            <button onclick="logout()" class="logoutBtn">Выйти</button>
+        </nav>
+    </header>
+
+    <main class="main">
+        <h2>💙 Личный кабинет</h2>
+        <div class="profile-container">
+            <h3>Ваши данные</h3>
+            <p><strong>Имя:</strong> <span id="profileName"></span></p>
+            <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+            
+            <hr>
+            
+            <h3>Статистика здоровья</h3>
+            <p>Здесь будет отображаться подробная статистика и история ваших трекеров.</p>
+            <div class="tracker-summary">
+                <p>💧 Вода: <span id="summaryWater"></span></p>
+                <p>👣 Шаги: <span id="summarySteps"></span></p>
+                <p>😴 Сон: <span id="summarySleep"></span> ч.</p>
+                <p>🍎 Питание: <span id="summaryFood"></span> ккал</p>
+                <p>🏋️‍♀️ Тренировки: <span id="summaryWorkout"></span> мин.</p>
+            </div>
+            
+        </div>
+    </main>
+
+    <footer class="footer">
+        © 2025 SMART Health AI — All Rights Reserved.
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

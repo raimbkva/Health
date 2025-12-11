@@ -9,7 +9,6 @@
 
 <body onload="loadDashboard()">
 
-    <!-- ================= HEADER ================= -->
     <header class="header">
         <div class="logo">SMART Health AI</div>
 
@@ -22,13 +21,11 @@
 
 
 
-    <!-- ================= MAIN BLOCK ================= -->
     <main class="main">
         <h2 class="welcome">Добро пожаловать, <span id="userEmail"></span></h2>
 
         <div class="trackers">
 
-            <!-- ВОДА -->
             <div class="tracker">
                 <h3>💧 Вода</h3>
                 <p id="waterValue">0</p>
@@ -38,7 +35,6 @@
                 </div>
             </div>
 
-            <!-- ШАГИ -->
             <div class="tracker">
                 <h3>👣 Шаги</h3>
                 <p id="stepsValue">0</p>
@@ -48,7 +44,6 @@
                 </div>
             </div>
 
-            <!-- СОН -->
             <div class="tracker">
                 <h3>😴 Сон (часы)</h3>
                 <p id="sleepValue">0</p>
@@ -58,7 +53,6 @@
                 </div>
             </div>
 
-            <!-- ПИТАНИЕ -->
             <div class="tracker">
                 <h3>🍎 Питание (ккал)</h3>
                 <p id="foodValue">0</p>
@@ -68,7 +62,6 @@
                 </div>
             </div>
 
-            <!-- ТРЕНИРОВКИ -->
             <div class="tracker">
                 <h3>🏋️‍♀️ Тренировки (мин.)</h3>
                 <p id="workoutValue">0</p>
@@ -79,11 +72,29 @@
             </div>
 
         </div>
-    </main>
+
+        <section class="ai-features">
+            <h2>🧠 AI-Ассистент</h2>
+
+            <div class="ai-output">
+                <h3>✨ Анализ и Рекомендации</h3>
+                <p id="aiRecommendations">Нажмите "Проанализировать", чтобы получить рекомендации.</p>
+                <button onclick="analyzeData()">Проанализировать</button>
+            </div>
+
+            <div class="chat-assistant">
+                <h3>💬 Чат с AI</h3>
+                <div id="chatWindow" class="chat-window">
+                    <p class="chat-message ai">Привет! Я твой SMART Health AI. Чем могу помочь?</p>
+                </div>
+                <input type="text" id="chatInput" placeholder="Спросите меня о своем здоровье...">
+                <button onclick="sendMessage()">Отправить</button>
+            </div>
+        </section>
+        </main>
 
 
 
-    <!-- ================= FOOTER ================= -->
     <footer class="footer">
         © 2025 SMART Health AI — All Rights Reserved.
     </footer>

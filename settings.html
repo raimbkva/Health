@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SMART Health — Настройки</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body onload="checkLoginAndLoadHeader()">
+
+    <header class="header">
+        <div class="logo">SMART Health AI</div>
+
+        <nav class="nav">
+            <button onclick="window.location.href='index.html'">Главная</button>
+            <button onclick="openProfile()">Личный кабинет</button>
+            <button onclick="logout()" class="logoutBtn">Выйти</button>
+        </nav>
+    </header>
+
+    <main class="main">
+        <h2>⚙️ Настройки приложения</h2>
+        <div class="settings-container">
+            
+            <h3>Общие настройки</h3>
+            <p>
+                <label>
+                    <input type="checkbox" checked> Получать ежедневные напоминания
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="checkbox"> Включить темную тему (скоро)
+                </label>
+            </p>
+
+            <h3>Управление аккаунтом</h3>
+            <button class="settings-button" onclick="alert('Функция изменения пароля скоро появится')">Изменить пароль</button>
+            <button class="settings-button delete-button" onclick="alert('Удаление аккаунта не реализовано в демо-версии')">Удалить аккаунт</button>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        © 2025 SMART Health AI — All Rights Reserved.
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
