@@ -16,7 +16,7 @@ const db = new pg.Pool({
   password: "260905aida",
   host: "localhost",
   port: 5432,
-  database: "healthapp"
+  database: "Health"
 });
 
 // Middleware для проверки токена
