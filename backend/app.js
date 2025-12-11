@@ -1,3 +1,4 @@
+console.log("Backend started");
 const express = require("express");
 const pg = require("pg");
 const cors = require("cors");
