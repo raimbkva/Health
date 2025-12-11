@@ -1,14 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-
 <head>
-    <meta charset="UTF-8">
-    <title>SMART Health — Главная</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <title>SMART Health — Главная</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body onload="loadDashboard()">
 
+<<<<<<< HEAD
     <header class="header">
         <div class="logo">SMART Health AI</div>
 
@@ -70,8 +69,29 @@
                     <button onclick="changeValue('workout', -10)">-</button>
                 </div>
             </div>
+=======
+  <header class="header">
+    <div class="logo">SMART Health AI</div>
+    <nav class="nav">
+      <button onclick="openProfile()">Личный кабинет</button>
+      <button onclick="openSettings()">Настройки</button>
+      <button onclick="logout()" class="logoutBtn">Выйти</button>
+    </nav>
+  </header>
 
+  <main class="main">
+    <h2 class="welcome">Добро пожаловать, <span id="regName"></span></h2>
+>>>>>>> a8c010e3d64188ac9a5274d3efe133db585a8418
+
+    <div class="trackers">
+      <div class="tracker">
+        <h3>💧 Вода (стаканы)</h3>
+        <p id="waterValue">0</p>
+        <div class="buttons">
+          <button onclick="adjust('water', 1)">+</button>
+          <button onclick="adjust('water', -1)">-</button>
         </div>
+<<<<<<< HEAD
 
         <section class="ai-features">
             <h2>🧠 AI-Ассистент</h2>
@@ -92,15 +112,57 @@
             </div>
         </section>
         </main>
+=======
+      </div>
+>>>>>>> a8c010e3d64188ac9a5274d3efe133db585a8418
 
+      <div class="tracker">
+        <h3>👣 Шаги</h3>
+        <p id="stepsValue">0</p>
+        <div class="buttons">
+          <button onclick="adjust('steps', 500)">+</button>
+          <button onclick="adjust('steps', -500)">-</button>
+        </div>
+      </div>
 
+      <div class="tracker">
+        <h3>😴 Сон (часы)</h3>
+        <p id="sleepValue">0</p>
+        <div class="buttons">
+          <button onclick="adjust('sleep', 1)">+</button>
+          <button onclick="adjust('sleep', -1)">-</button>
+        </div>
+      </div>
 
+<<<<<<< HEAD
     <footer class="footer">
         © 2025 SMART Health AI — All Rights Reserved.
     </footer>
+=======
+      <div class="tracker">
+        <h3>🍎 Питание (ккал)</h3>
+        <p id="foodValue">0</p>
+        <div class="buttons">
+          <button onclick="adjust('food', 100)">+</button>
+          <button onclick="adjust('food', -100)">-</button>
+        </div>
+      </div>
+>>>>>>> a8c010e3d64188ac9a5274d3efe133db585a8418
 
+      <div class="tracker">
+        <h3>🏋️ Тренировки (мин.)</h3>
+        <p id="workoutValue">0</p>
+        <div class="buttons">
+          <button onclick="adjust('workout', 10)">+</button>
+          <button onclick="adjust('workout', -10)">-</button>
+        </div>
+      </div>
+    </div>
 
-    <script src="app.js"></script>
+  </main>
+
+  <footer class="footer">© 2025 SMART Health AI</footer>
+
+  <script src="app.js"></script>
 </body>
-
 </html>
