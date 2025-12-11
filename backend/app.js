@@ -13,7 +13,7 @@ const SECRET = "your_jwt_secret_key"; // В продакшене использ�
 
 const db = new pg.Pool({
   user: "postgres",
-  password: "your_password",
+  password: "260905aida",
   host: "localhost",
   port: 5432,
   database: "healthapp"
