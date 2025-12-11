@@ -1,26 +1,27 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
+
 <head>
-  <meta charset="utf-8" />
-  <title>Регистрация — SMART Health</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="auth-page">
-  <div class="auth-container">
-    <h2>Регистрация</h2>
 
-    <input id="regName" placeholder="Имя (отображаемое)" />
-    <input id="regEmail" placeholder="Email" />
-    <input id="regPassword" placeholder="Пароль" type="password" />
+<body>
 
-    <button id="btnRegister">Зарегистрироваться</button>
+    <div class="container">
+        <h2>Регистрация</h2>
 
-    <p>Уже есть аккаунт? <a href="login.html">Войти</a></p>
-  </div>
+        <input type="text" id="regName" placeholder="Имя">
+        <input type="email" id="regEmail" placeholder="Email">
+        <input type="password" id="regPassword" placeholder="Пароль">
 
-  <script src="app.js"></script>
-  <script>
-    document.getElementById('btnRegister').addEventListener('click', register);
-  </script>
+        <button onclick="register()">Зарегистрироваться</button>
+
+        <p>Уже есть аккаунт? <a href="login.html">Войти</a></p>
+    </div>
+
+    <script src="app.js"></script>
 </body>
+
 </html>
