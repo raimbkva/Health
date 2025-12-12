@@ -1,3 +1,118 @@
+/* ===== СТИЛИ РЕГИСТРАЦИИ И АВТОРИЗАЦИИ ===== */
+
+/* Основной контейнер для центрирования формы */
+.container {
+    max-width: 400px;
+    margin: 100px auto;
+    /* Центрирование по вертикали и горизонтали */
+    padding: 30px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.container h2 {
+    color: #00796b;
+    /* Цвет заголовка */
+    margin-bottom: 25px;
+}
+
+.container input[type="text"],
+.container input[type="email"],
+.container input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    /* Важно для корректной ширины */
+    font-size: 1em;
+}
+
+.container button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: #00796b;
+    /* Основной цвет */
+    color: white;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.container button:hover {
+    background-color: #004d40;
+    /* Темнее при наведении */
+}
+
+/* Стили для ссылок "Войти/Регистрация" */
+.container p {
+    margin-top: 20px;
+    font-size: 0.9em;
+}
+
+.container p a {
+    color: #00796b;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.container p a:hover {
+    text-decoration: underline;
+}
+
+/* Стили для страницы Профиля (Личный кабинет) */
+.profile-section {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.profile-section h2 {
+    color: #00796b;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.user-info,
+.tracker-summary {
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid #b2dfdb;
+    border-radius: 6px;
+    background-color: #f1f8e9;
+    /* Светло-зеленый фон */
+}
+
+.user-info p {
+    margin: 8px 0;
+    font-size: 1.1em;
+}
+
+.tracker-summary ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.tracker-summary li {
+    background-color: #e0f2f1;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
 /* ===== ОБЩИЕ СТИЛИ ===== */
 body {
     font-family: 'Arial', sans-serif;
