@@ -1,80 +1,97 @@
 <!doctype html>
 <html lang="ru">
-  <link rel="stylesheet" href="style.css">
+
 <head>
-  <meta charset="utf-8" />
-  <title>SMART Health — Главная</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8" />
+    <title>SMART Health — Главная</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body onload="loadDashboard()">
 
-    <header class="header">
-        <div class="logo">SMART Health AI</div>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo">SMART Health AI</div>
+        <nav class="nav">
+            <button onclick="openProfile()">Личный кабинет</button>
+            <button onclick="openSettings()">Настройки</button>
+            <button onclick="logout()" class="logoutBtn">Выйти</button>
+        </nav>
+    </header>
 
-        <nav class="nav">
-            <button onclick="openProfile()">Личный кабинет</button>
-            <button onclick="openSettings()">Настройки</button>
-            <button onclick="logout()" class="logoutBtn">Выйти</button>
-        </nav>
-    </header>
+    <main class="main">
 
-    <main class="main">
-                <h2 class="welcome">Добро пожаловать, <span id="userEmail"></span></h2> 
+        <h2 class="welcome">Добро пожаловать, <span id="userEmail"></span></h2>
 
-        <div class="trackers">
-            
-                        <div class="tracker">
-                <h3>💧 Вода(ст)</h3>
-                <p id="waterValue">0</p>
-                <div class="buttons">
-                                        <button onclick="changeValue('water', 1)">+</button>
-                    <button onclick="changeValue('water', -1)">-</button>
-                </div>
-            </div>
+        <!-- === КАЛЕНДАРЬ === -->
+        <h2 class="calendar-title">Календарь заданий</h2>
 
-                        <div class="tracker">
-                <h3>👣 Шаги</h3>
-                <p id="stepsValue">0</p>
-                <div class="buttons">
-                    <button onclick="changeValue('steps', 500)">+</button>
-                    <button onclick="changeValue('steps', -500)">-</button>
-                </div>
-            </div>
+        <div class="calendar-header">
+            <button onclick="prevMonth()">&lt;</button>
+            <h3 id="monthLabel"></h3>
+            <button onclick="nextMonth()">&gt;</button>
+        </div>
 
-                        <div class="tracker">
-                <h3>😴 Сон (часы)</h3>
-                <p id="sleepValue">0</p>
-                <div class="buttons">
-                    <button onclick="changeValue('sleep', 1)">+</button>
-                    <button onclick="changeValue('sleep', -1)">-</button>
-                </div>
-            </div>
+        <div id="calendar" class="calendar-grid"></div>
 
-                        <div class="tracker">
-                <h3>🍎 Питание (ккал)</h3>
-                <p id="foodValue">0</p>
-                <div class="buttons">
-                    <button onclick="changeValue('food', 100)">+</button>
-                    <button onclick="changeValue('food', -100)">-</button>
-                </div>
-            </div>
+        <!-- === ТРЕКЕРЫ === -->
+        <div class="trackers">
 
-                        <div class="tracker">
-                <h3>🏋️‍♀️ Тренировки (мин.)</h3>
-                <p id="workoutValue">0</p>
-                <div class="buttons">
-                    <button onclick="changeValue('workout', 10)">+</button>
-                    <button onclick="changeValue('workout', -10)">-</button>
-                </div>
-            </div>
-        </div> 
-        
+            <div class="tracker">
+                <h3>💧 Вода</h3>
+                <p id="waterValue">0</p>
+                <div class="buttons">
+                    <button onclick="changeValue('water', 1)">+</button>
+                    <button onclick="changeValue('water', -1)">-</button>
+                </div>
+            </div>
+
+            <div class="tracker">
+                <h3>👣 Шаги</h3>
+                <p id="stepsValue">0</p>
+                <div class="buttons">
+                    <button onclick="changeValue('steps', 500)">+</button>
+                    <button onclick="changeValue('steps', -500)">-</button>
+                </div>
+            </div>
+
+            <div class="tracker">
+                <h3>😴 Сон</h3>
+                <p id="sleepValue">0</p>
+                <div class="buttons">
+                    <button onclick="changeValue('sleep', 1)">+</button>
+                    <button onclick="changeValue('sleep', -1)">-</button>
+                </div>
+            </div>
+
+            <div class="tracker">
+                <h3>🍎 Питание</h3>
+                <p id="foodValue">0</p>
+                <div class="buttons">
+                    <button onclick="changeValue('food', 100)">+</button>
+                    <button onclick="changeValue('food', -100)">-</button>
+                </div>
+            </div>
+
+            <div class="tracker">
+                <h3>🏋️‍♀️ Тренировки</h3>
+                <p id="workoutValue">0</p>
+                <div class="buttons">
+                    <button onclick="changeValue('workout', 10)">+</button>
+                    <button onclick="changeValue('workout', -10)">-</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- === AI === -->
         <section class="ai-features">
             <h2>🧠 AI-Ассистент</h2>
 
             <div class="ai-output">
                 <h3>✨ Анализ и Рекомендации</h3>
-                <p id="aiRecommendations">Нажмите "Проанализировать", чтобы получить рекомендации.</p>
+                <p id="aiRecommendations">Нажмите «Проанализировать», чтобы получить советы.</p>
                 <button onclick="analyzeData()">Проанализировать</button>
             </div>
 
@@ -83,17 +100,19 @@
                 <div id="chatWindow" class="chat-window">
                     <p class="chat-message ai">Привет! Я твой SMART Health AI. Чем могу помочь?</p>
                 </div>
-                <input type="text" id="chatInput" placeholder="Спросите меня о своем здоровье...">
+
+                <input id="chatInput" type="text" placeholder="Введите сообщение...">
                 <button onclick="sendMessage()">Отправить</button>
             </div>
         </section>
 
-    </main>
+    </main>
 
-    <footer class="footer">
-        © 2025 SMART Health AI — All Rights Reserved.
-    </footer>
+    <footer class="footer">
+        © 2025 SMART Health AI — All Rights Reserved.
+    </footer>
 
-  <script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
+
 </html>

@@ -1,3 +1,6 @@
+/*****************************
+ *      РЕГИСТРАЦИЯ
+ *****************************/
 function register() {
     let name = document.getElementById("regName").value;
     let email = document.getElementById("regEmail").value;
@@ -9,98 +12,47 @@ function register() {
     }
 
     let user = { name, email, password };
-    
-    // ИСПРАВЛЕНИЕ: Используем шаблонную строку (обратные кавычки `) для включения переменной ${email}
-    localStorage.setItem(`user_${email}`, JSON.stringify(user)); 
+    localStorage.setItem(`user_${email}`, JSON.stringify(user));
 
     alert("Регистрация успешна!");
     window.location.href = "login.html";
 }
-// Вход
+
+/*****************************
+ *      ВХОД
+ *****************************/
 function login() {
     let email = document.getElementById("logEmail").value;
     let password = document.getElementById("logPassword").value;
 
-    // 1. Поиск пользователя:
-    // Мы ищем ключ вида 'user_test@example.com'
-    let user = JSON.parse(localStorage.getItem(`user_${email}`)); // <--- Проблема могла быть здесь
+    let user = JSON.parse(localStorage.getItem(`user_${email}`));
 
     if (!user) {
-        alert("Пользователь не найден! Проверьте Email.");
+        alert("Пользователь не найден!");
         return;
     }
 
-    // 2. Проверка пароля:
-    if (password === user.password) {
-        
-        // УСПЕХ: Устанавливаем текущего пользователя в 'currentUser'
-        localStorage.setItem("currentUser", JSON.stringify(user)); 
-        localStorage.setItem("loggedIn", "true"); 
-        
-        alert("Вход выполнен успешно!");
-        window.location.href = "index.html";
-    } else {
-        alert("Неверный логин или пароль!");
-    }
-}
-// Главная — загрузка пользователя
-function loadUser() {
-    let logged = localStorage.getItem("loggedIn");
-
-    if (logged !== "true") {
-        window.location.href = "login.html";
+    if (password !== user.password) {
+        alert("Неверный пароль!");
         return;
     }
 
-    let user = JSON.parse(localStorage.getItem("user"));
-    document.getElementById("userEmail").innerText = "Вы вошли как: " + user.email;
+    localStorage.setItem("currentUser", JSON.stringify(user));
+    localStorage.setItem("loggedIn", "true");
+
+    window.location.href = "index.html";
 }
-// Загружаем данные пользователя и трекеров
+
+/*****************************
+ *    ЗАГРУЗКА ГЛАВНОЙ
+ *****************************/
 function loadDashboard() {
-    let logged = localStorage.getItem("loggedIn");
-    if (logged !== "true") {
+    if (localStorage.getItem("loggedIn") !== "true") {
         window.location.href = "login.html";
         return;
     }
 
-    let user = JSON.parse(localStorage.getItem("user"));
-    document.getElementById("userEmail").innerText = user.email;
-
-    // Загружаем трекеры
-    updateUI("water");
-    updateUI("steps");
-    updateUI("sleep");
-    updateUI("food");
-    updateUI("workout");
-}
-
-// Обновление UI трекера
-function updateUI(name) {
-    let value = localStorage.getItem(name) || 0;
-    document.getElementById(name + "Value").innerText = value;
-}
-
-// Изменение значения трекера
-function changeValue(name, amount) {
-    let current = parseInt(localStorage.getItem(name)) || 0;
-    let updated = current + amount;
-
-    if (updated < 0) updated = 0;
-
-    localStorage.setItem(name, updated);
-    updateUI(name);
-}
-
-// Загружаем email и трекеры
-function loadDashboard() {
-    let logged = localStorage.getItem("loggedIn");
-
-    if (logged !== "true") {
-        window.location.href = "login.html";
-        return;
-    }
-
-    let user = JSON.parse(localStorage.getItem("user"));
+    let user = JSON.parse(localStorage.getItem("currentUser"));
     document.getElementById("userEmail").innerText = user.email;
 
     updateUI("water");
@@ -108,8 +60,13 @@ function loadDashboard() {
     updateUI("sleep");
     updateUI("food");
     updateUI("workout");
+
+    renderCalendar();
 }
 
+/*****************************
+ *        ТРЕКЕРЫ
+ *****************************/
 function updateUI(name) {
     let value = localStorage.getItem(name) || 0;
     document.getElementById(name + "Value").innerText = value;
@@ -122,113 +79,245 @@ function changeValue(name, amount) {
 
     localStorage.setItem(name, updated);
     updateUI(name);
-}
-// Обновление UI трекера
-function updateUI(name) {
-    let value = localStorage.getItem(name) || 0;
-    document.getElementById(name + "Value").innerText = value;
+    analyzeData();
 }
 
-// Изменение значения трекера
-function changeValue(name, amount) {
-    let current = parseInt(localStorage.getItem(name)) || 0;
-    let updated = current + amount;
-    
-    // Проверка, чтобы не уходить в минус
-    if (updated < 0) updated = 0; 
+/*****************************
+ *      КАЛЕНДАРЬ
+ *****************************/
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
 
-    localStorage.setItem(name, updated);
-    updateUI(name);
+function renderCalendar() {
+    const calendar = document.getElementById("calendar");
+    calendar.innerHTML = "";
 
-    // Добавляем автоматический анализ при изменении данных
-    analyzeData(); 
+    const monthNames = [
+        "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+        "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+    ];
+
+    document.getElementById("monthLabel").innerText =
+        `${monthNames[currentMonth]} ${currentYear}`;
+
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+    // Пустые ячейки перед первым днем
+    for (let i = 1; i < firstDay; i++) {
+        const emptyCell = document.createElement("div");
+        emptyCell.classList.add("calendar-cell", "empty");
+        calendar.appendChild(emptyCell);
+    }
+
+    // Заполнение дней месяца
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const tasks = JSON.parse(localStorage.getItem("tasks_" + dateStr)) || [];
+
+        const cell = document.createElement("div");
+        cell.classList.add("calendar-cell");
+
+        // подсветка сегодняшнего дня
+        const today = new Date();
+        if (day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+            cell.style.backgroundColor = "#e0f7fa";
+        }
+
+        // дата
+        const dateNumber = document.createElement("div");
+        dateNumber.className = "date-number";
+        dateNumber.innerText = day;
+        cell.appendChild(dateNumber);
+
+        // задачи
+        const taskList = document.createElement("div");
+        taskList.className = "task-list";
+
+        tasks.forEach((task, index) => {
+            const taskItem = document.createElement("div");
+            taskItem.className = "task-item";
+            taskItem.innerHTML = `<span style="${task.done ? 'text-decoration: line-through' : ''}" onclick="toggleDone('${dateStr}', ${index})">${task.text}</span>
+                                  <button onclick="editTask('${dateStr}', ${index})">✏️</button>
+                                  <button onclick="deleteTask('${dateStr}', ${index})">🗑️</button>`;
+            taskList.appendChild(taskItem);
+        });
+
+        cell.appendChild(taskList);
+
+        // добавление новой задачи
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Новая задача...";
+        input.id = "input-" + dateStr;
+        input.className = "task-input";
+
+        const addBtn = document.createElement("button");
+        addBtn.innerText = "+";
+        addBtn.onclick = () => addTask(dateStr);
+
+        cell.appendChild(input);
+        cell.appendChild(addBtn);
+
+        calendar.appendChild(cell);
+    }
 }
 
-// ================= НОВЫЕ AI ФУНКЦИИ =================
+function prevMonth() {
+    currentMonth--;
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    }
+    renderCalendar();
+}
 
-/**
+function nextMonth() {
+    currentMonth++;
+    if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+    renderCalendar();
+}
+
+/*****************************
+ *        ЗАДАЧИ
+ *****************************/
+function addTask(dateStr) {
+    const input = document.getElementById("input-" + dateStr);
+    const text = input.value.trim();
+    if (!text) return;
+
+    let tasks = JSON.parse(localStorage.getItem("tasks_" + dateStr)) || [];
+    tasks.push({ text, done: false });
+    localStorage.setItem("tasks_" + dateStr, JSON.stringify(tasks));
+
+    input.value = "";
+    renderCalendar();
+}
+
+function toggleDone(dateStr, index) {
+    let tasks = JSON.parse(localStorage.getItem("tasks_" + dateStr)) || [];
+    tasks[index].done = !tasks[index].done;
+    localStorage.setItem("tasks_" + dateStr, JSON.stringify(tasks));
+    renderCalendar();
+}
+
+function editTask(dateStr, index) {
+    let tasks = JSON.parse(localStorage.getItem("tasks_" + dateStr)) || [];
+    const newText = prompt("Редактировать задачу", tasks[index].text);
+    if (newText !== null) {
+        tasks[index].text = newText;
+        localStorage.setItem("tasks_" + dateStr, JSON.stringify(tasks));
+        renderCalendar();
+    }
+}
+
+function deleteTask(dateStr, index) {
+    let tasks = JSON.parse(localStorage.getItem("tasks_" + dateStr)) || [];
+    tasks.splice(index, 1);
+    localStorage.setItem("tasks_" + dateStr, JSON.stringify(tasks));
+    renderCalendar();
+}
+
+/*****************************
  * AI-функция: Анализ данных и Рекомендации
- */
+ *****************************/
 function analyzeData() {
-    
     const data = {
         water: parseInt(localStorage.getItem("water")) || 0,
         steps: parseInt(localStorage.getItem("steps")) || 0,
         sleep: parseInt(localStorage.getItem("sleep")) || 0,
-        food: parseInt(localStorage.getItem("food")) || 0, // Условная цель 2000 ккал
-        workout: parseInt(localStorage.getItem("workout")) || 0, // Условная цель 60 мин
+        food: parseInt(localStorage.getItem("food")) || 0,
+        workout: parseInt(localStorage.getItem("workout")) || 0,
     };
 
-    let recommendationsList = []; // Массив для сбора всех проблем и рекомендаций
+    let recommendationsList = [];
     let criticalIssues = false;
     let seriousWarning = false;
 
-    // 1. Проверка СНА
+    // Сон
     if (data.sleep < 6) {
-        recommendationsList.push("😴 **Дефицит сна (менее 6 часов):** Вам критически не хватает сна. Это может негативно сказаться на когнитивных функциях и настроении.");
+        recommendationsList.push(`😴 *Дефицит сна (менее 6 часов):* Вам критически не хватает сна.`);
         criticalIssues = true;
     } else if (data.sleep < 7) {
-        recommendationsList.push("💤 **Мало спите (7-8 часов - ваша цель):** Недосыпание снижает иммунитет и восстановление. Попробуйте ложиться раньше.");
+        recommendationsList.push(`💤 *Мало спите (7-8 часов - ваша цель):* Попробуйте ложиться раньше.`);
     } else if (data.sleep > 10) {
-        recommendationsList.push("🛌 **Избыток сна (более 10 часов):** Чрезмерный сон может быть признаком усталости или проблем со здоровьем.");
+        recommendationsList.push(`🛌 *Избыток сна (более 10 часов):* Чрезмерный сон может быть признаком усталости.`);
     }
 
-    // 2. Проверка ВОДЫ
+    // Вода
     if (data.water < 4) {
-        recommendationsList.push("💧 **Обезвоживание (менее 4 стаканов):** Недостаток воды влияет на энергию и пищеварение. Поставьте цель - 8 стаканов в день.");
+        recommendationsList.push(`💧 *Обезвоживание (менее 4 стаканов):* Пейте больше воды.`);
         seriousWarning = true;
     }
 
-    // 3. Проверка ПИТАНИЯ (калораж)
-    // Предполагаем, что 1500 ккал - это дефицит, а 2500 - избыток для среднего человека
+    // Питание
     if (data.food < 1500 && data.food !== 0) {
-        recommendationsList.push("📉 **Недостаток калорий:** Ваш рацион слишком скуден. Недостаточное питание ослабляет организм. Увеличьте количество потребляемой пищи.");
+        recommendationsList.push(`📉 *Недостаток калорий:* Ваш рацион слишком скуден. Увеличьте потребление.`);
         seriousWarning = true;
     } else if (data.food > 2500) {
-        recommendationsList.push("📈 **Избыток калорий:** Ваш калораж слишком высок. Пересмотрите рацион для контроля веса.");
+        recommendationsList.push(`📈 *Избыток калорий:* Ваш калораж слишком высок. Пересмотрите рацион.`);
     }
-    
-    // 4. Проверка ШАГОВ
+
+    // Шаги
     if (data.steps < 5000) {
-        recommendationsList.push("🚶‍♀️ **Низкая активность:** Ваши шаги ниже рекомендуемого минимума (10 000). Совершайте ежедневные 30-минутные прогулки.");
+        recommendationsList.push(`🚶‍♀ *Низкая активность:* Сделайте хотя бы 30 минут прогулки.`);
     }
-    
-    // 5. Проверка ТРЕНИРОВОК
+
+    // Тренировки
     if (data.workout < 30) {
-        recommendationsList.push("🏋️‍♀️ **Короткие тренировки:** Увеличьте активность до 40-60 минут для заметного эффекта на сердечно-сосудистую систему.");
+        recommendationsList.push(`🏋‍♀ *Короткие тренировки:* Увеличьте активность до 40-60 минут.`);
     }
 
-
-    // ===================================
-    // ФОРМИРОВАНИЕ ИТОГОВОГО СООБЩЕНИЯ
-    // ===================================
-
+    // Итоговое сообщение
     let finalMessage = "";
-
     if (recommendationsList.length === 0) {
-        finalMessage = "✅ **Отлично!** Ваши показатели в норме. Продолжайте в том же духе. 💪";
+        finalMessage = `✅ Отлично! Ваши показатели в норме. Продолжайте в том же духе. 💪`;
     } else {
-        // Выводим все обнаруженные проблемы списком
-        finalMessage = "### Обнаруженные проблемы и рекомендации:\n";
-        finalMessage += "<ul>" + recommendationsList.map(item => `<li>${item}</li>`).join('') + "</ul>";
+        finalMessage = "<ul>" + recommendationsList.map(item => `<li>${item}</li>`).join('') + "</ul>";
 
-        // Добавляем предупреждения, основанные на серьезности
         if (criticalIssues) {
-            finalMessage += "<p class='warning'>🚨 **КРИТИЧЕСКОЕ ПРЕДУПРЕЖДЕНИЕ:** У вас несколько критических нарушений режима. **Настоятельно рекомендуем обратиться к специалисту** для оценки вашего состояния.</p>";
+            finalMessage += `<p class='warning'>🚨 *КРИТИЧЕСКОЕ ПРЕДУПРЕЖДЕНИЕ:* Обратитесь к специалисту!</p>`;
         } else if (seriousWarning) {
-            finalMessage += "<p class='warning'>⚠️ **СЕРЬЕЗНОЕ ПРЕДУПРЕЖДЕНИЕ:** Пожалуйста, немедленно позаботьтесь о себе! Изменения в режиме сна и питания необходимы для предотвращения проблем со здоровьем.</p>";
+            finalMessage += `<p class='warning'>⚠ *СЕРЬЕЗНОЕ ПРЕДУПРЕЖДЕНИЕ:* Поменяйте режим сна и питания.</p>`;
         }
     }
 
-    // Обновление интерфейса
     document.getElementById("aiRecommendations").innerHTML = finalMessage;
 }
-// ===============================================
-// 1. ФУНКЦИИ УПРАВЛЕНИЯ ДАННЫМИ (data loading)
-// ===============================================
 
+/*****************************
+ * ЧАТ ФУНКЦИИ
+ *****************************/
+function sendMessage() {
+    const chatInput = document.getElementById("chatInput");
+    const userMessage = chatInput.value.trim();
+    if (!userMessage) return;
+
+    appendMessage(userMessage, 'user');
+    chatInput.value = "";
+
+    setTimeout(() => {
+        const aiResponse = generateAiResponse(userMessage);
+        appendMessage(aiResponse, 'ai');
+    }, 500);
+}
+
+function appendMessage(text, sender) {
+    const chatWindow = document.getElementById("chatWindow");
+    const p = document.createElement('p');
+    p.classList.add('chat-message', sender);
+    p.innerHTML = text; // innerHTML для поддержки форматирования
+    chatWindow.appendChild(p);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+/*****************************
+ * ЛОГИКА AI
+ *****************************/
 function getTrackerData() {
-    // Получаем данные из localStorage 
     return {
         water: parseInt(localStorage.getItem("water")) || 0,
         steps: parseInt(localStorage.getItem("steps")) || 0,
@@ -238,194 +327,74 @@ function getTrackerData() {
     };
 }
 
-
-// ===============================================
-// 2. ФУНКЦИИ ЧАТА (sendMessage, appendMessage)
-// ===============================================
-
-function sendMessage() {
-    const chatInput = document.getElementById("chatInput");
-    const userMessage = chatInput.value.trim();
-
-    if (userMessage === "") return;
-
-    // 1. Добавляем сообщение пользователя
-    appendMessage(userMessage, 'user');
-    chatInput.value = ""; // Очищаем поле ввода
-
-    // 2. Имитация ответа AI-ассистента
-    setTimeout(() => {
-        const aiResponse = generateAiResponse(userMessage);
-        appendMessage(aiResponse, 'ai');
-    }, 500);
-}
-
-function appendMessage(text, sender) {
-    const chatWindow = document.getElementById("chatWindow");
-    const messageElement = document.createElement('p');
-    messageElement.classList.add('chat-message', sender);
-    
-    // Используем innerHTML для поддержки форматирования (например, <ul>, <b>, 🔑)
-    messageElement.innerHTML = text; 
-    
-    chatWindow.appendChild(messageElement);
-
-    // Прокрутка вниз для отображения последнего сообщения
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-}
-
-
-// ===============================================
-// 3. ФУНКЦИИ ЛОГИКИ AI (generateAiResponse, analyzeCurrentDataForChat)
-// ===============================================
-
-// (Вставьте сюда функции generateAiResponse и analyzeCurrentDataForChat)
 function analyzeCurrentDataForChat(data) {
-    let recommendationsList = [];
+    let rec = [];
 
-    if (data.sleep < 7) {
-        recommendationsList.push(`Сон (${data.sleep} ч.): Похоже, вы спите меньше рекомендуемых 7-9 часов. Недосып влияет на метаболизм.`);
-    }
-    if (data.water < 8) {
-        recommendationsList.push(`Вода (${data.water} ст.): Постарайтесь увеличить потребление. Обезвоживание может маскироваться под голод.`);
-    }
-    if (data.steps < 7000) {
-        recommendationsList.push(`Шаги (${data.steps}): Ваша активность низкая. Включите в график 30 минут активной ходьбы.`);
-    }
-    if (data.food > 2500) {
-        recommendationsList.push(`Питание (${data.food} ккал): Ваш калораж высок. Если цель — похудение, нужно сократить порции.`);
-    } else if (data.food < 1500 && data.food !== 0) {
-        recommendationsList.push(`Питание (${data.food} ккал): Ваш рацион слишком скуден. Это может замедлить метаболизм.`);
-    }
+    if (data.sleep < 7) rec.push(`Сон (${data.sleep} ч.): Недостаточно для восстановления.`);
+    if (data.water < 8) rec.push(`Вода (${data.water} ст.): Пейте больше.`);
+    if (data.steps < 7000) rec.push(`Шаги (${data.steps}): Старайтесь активнее.`);
+    if (data.food > 2500) rec.push(`Питание (${data.food} ккал): Калораж слишком высок.`);
+    else if (data.food < 1500 && data.food !== 0) rec.push(`Питание (${data.food} ккал): Калорий мало.`);
 
-    if (recommendationsList.length === 0) {
-        return "✅ **Отлично!** Ваши текущие показатели сбалансированы. Продолжайте в том же духе!";
-    } else {
-        return "🧠 **Анализ трекера:** Я вижу несколько областей для улучшения:\n\n* " + recommendationsList.join('\n* ');
-    }
+    if (rec.length === 0) return "✅ Отлично! Показатели сбалансированы.";
+    return "🧠 Анализ трекера:\n* " + rec.join("\n* ");
 }
 
 function generateAiResponse(message) {
-    message = message.toLowerCase();
     const data = getTrackerData();
+    message = message.toLowerCase();
     let response = "";
-    // ... (весь код логики generateAiResponse) ...
-    
-     if (message.includes("исходя из моего трекера") || message.includes("что ты можешь порекомендовать")) {
+
+    if (message.includes("анализ") || message.includes("рекомендации")) {
         response = analyzeCurrentDataForChat(data);
-    
-    } else if (message.includes("похудеть") || message.includes("набрать вес")) {
-        
-        if (message.includes("похудеть")) {
-            response = "🔑 **Стратегия Похудения (Дефицит):** Чтобы начать худеть, вам нужно создать дефицит калорий (тратить больше, чем потребляете).\n";
-            response += `\n* **Питание:** Ваш текущий калораж ${data.food} ккал. Попробуйте уменьшить его на 200-300 ккал (до 1500-1800 для старта).\n`;
-            response += `* **Активность:** Ваши текущие шаги ${data.steps}, тренировки ${data.workout} мин. Увеличьте кардио-нагрузку (шаги/бег) и добавьте силовые тренировки для сохранения мышц.`;
-        } else { // Набрать вес
-            response = "🔑 **Стратегия Набора Веса (Профицит):** Для набора веса (мышечной массы) нужен избыток калорий и силовые нагрузки.\n";
-            response += `\n* **Питание:** Ваш текущий калораж ${data.food} ккал. Постепенно увеличьте его на 300-500 ккал, отдавая предпочтение белкам и сложным углеводам.\n`;
-            response += `* **Тренировки:** Фокусируйтесь на силовых тренировках (минимум 3 раза в неделю) для стимуляции роста мышц. Ваши текущие тренировки: ${data.workout} мин.`;
-        }
-        
-    } else if (message.includes("правильно питаться") || message.includes("сколько калорий")) {
-        response = `🍎 **Общие рекомендации по питанию:** Для поддержания здоровья с вашей активностью вам, вероятно, нужно около 2000 ккал. Ваш текущий показатель: ${data.food} ккал.\n`;
-        response += "* Сосредоточьтесь на цельнозерновых продуктах, белках и овощах.\n* Избегайте быстрых углеводов и избытка сахара.";
-    
-    } else if (message.includes("сколько стаканов воды")) {
-        response = `💧 **Гидратация:** Вы выпили ${data.water} стаканов. Цель — 8 стаканов (примерно 2 литра) для нормального метаболизма. Но если вы активно тренируетесь (у вас ${data.workout} мин.), вам нужно пить ещё больше!`;
-    
-    // 2. БАЗОВЫЕ ЗАПРОСЫ
-    
+    } else if (message.includes("похудеть")) {
+        response = `🔑 Стратегия похудения: уменьшите калории (${data.food} ккал), увеличьте шаги (${data.steps}), добавьте силовые тренировки (${data.workout} мин).`;
+    } else if (message.includes("набрать вес")) {
+        response = `🔑 Стратегия набора массы: увеличьте калории (${data.food} ккал), тренировки (${data.workout} мин), силовые упражнения.`;
     } else if (message.includes("вода")) {
-        response = `Ваш текущий показатель воды: ${data.water} стаканов. Рекомендуется 8 стаканов (около 2 литров).`;
+        response = `💧 Вода: вы выпили ${data.water} стаканов. Цель — 8 стаканов.`;
     } else if (message.includes("шаги")) {
-        response = `Ваш текущий показатель шагов: ${data.steps}. Цель в 10,000 шагов хороша, но даже 7,000 шагов в день улучшат ваше кардио-здоровье.`;
+        response = `👣 Шаги: ${data.steps}. Цель — 10 000 шагов.`;
     } else if (message.includes("сон")) {
-        response = `Ваш текущий сон: ${data.sleep} часов. Взрослым обычно требуется 7-9 часов. Помните, что качество сна важнее его количества.`;
+        response = `😴 Сон: ${data.sleep} ч. Рекомендуется 7-9 ч.`;
     } else if (message.includes("тренировки")) {
-        response = `Ваше время тренировок: ${data.workout} мин. Старайтесь уделять умеренным аэробным нагрузкам не менее 150 минут в неделю.`;
+        response = `🏋️‍♀ Тренировки: ${data.workout} мин. Цель — 30-60 мин.`;
     } else if (message.includes("привет") || message.includes("здравствуй")) {
-        response = "Привет! Я готов помочь вам проанализировать ваши показатели здоровья.";
+        response = "Привет! Я твой SMART Health AI. Спросите рекомендации или анализ трекера.";
     } else {
-        response = "Я могу ответить на сложные вопросы (про похудение, набор веса, анализ трекера) или дать информацию о воде, сне, питании и шагах. Спросите что-нибудь конкретное!";
+        response = "Я могу дать рекомендации по воде, сну, шагам, питанию и тренировкам. Спросите что-то конкретное!";
     }
 
     return response;
 }
 
-
-// ===============================================
-// 4. ОБРАБОТЧИКИ СОБЫТИЙ (ENTER)
-// ===============================================
-
-document.addEventListener('DOMContentLoaded', (event) => {
+/*****************************
+ * ENTER в поле чата
+ *****************************/
+document.addEventListener('DOMContentLoaded', () => {
     const chatInput = document.getElementById("chatInput");
     if (chatInput) {
         chatInput.addEventListener('keypress', function(e) {
-            // Проверяем, была ли нажата клавиша Enter (код 13 или 'Enter')
-            if (e.key === 'Enter' || e.keyCode === 13) {
-                e.preventDefault(); 
+            if (e.key === 'Enter') {
+                e.preventDefault();
                 sendMessage();
             }
         });
     }
 });
-// ===== Кнопки в header =====
+
+/*****************************
+ *      НАВИГАЦИЯ HEADER
+ *****************************/
 function openProfile() {
-   window.location.href = "profile.html";
+    window.location.href = "profile.html";
 }
 
 function openSettings() {
     window.location.href = "settings.html";
 }
 
-// ===== Выход =====
 function logout() {
     localStorage.setItem("loggedIn", "false");
     window.location.href = "login.html";
 }
-
-// ===============================================
-// ФУНКЦИИ ПРОФИЛЯ (profile.html)
-// ===============================================
-
-function loadProfile() {
-    // 1. Проверка авторизации
-    if (!localStorage.getItem('currentUser')) {
-        window.location.href = 'login.html';
-        return;
-    }
-
-    // 2. Загрузка и отображение данных пользователя
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    
-    // В вашем HTML: <span id="regName"> и <span id="regEmail">
-    const nameElement = document.getElementById('regName');
-    const emailElement = document.getElementById('regEmail');
-
-    if (nameElement) {
-        // Предполагаем, что имя хранится как 'name'
-        nameElement.textContent = currentUser.name || 'Не указано'; 
-    }
-    if (emailElement) {
-        emailElement.textContent = currentUser.email || 'Не указано';
-    }
-
-
-    // 3. Загрузка и отображение статистики здоровья
-    const healthData = getTrackerData(); // Используем уже существующую функцию для получения данных
-
-    // В вашем HTML: <span id="summaryWater">, <span id="summarySteps"> и т.д.
-    
-    document.getElementById('summaryWater').textContent = healthData.water;
-    document.getElementById('summarySteps').textContent = healthData.steps;
-    document.getElementById('summarySleep').textContent = healthData.sleep;
-    document.getElementById('summaryFood').textContent = healthData.food;
-    document.getElementById('summaryWorkout').textContent = healthData.workout;
-    
-    // Обработка случая, если нет данных (т.е. нули)
-    if (healthData.water === 0 && healthData.steps === 0 && healthData.sleep === 0) {
-        document.querySelector('.tracker-summary p:first-child').innerHTML += 
-            ' <em>(Начните отслеживать данные на главной странице)</em>';
-    }
-}
-
