@@ -411,6 +411,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+/*****************************
+ * ФУНКЦИИ ПРОФИЛЯ (profile.html)
+ *****************************/
+function loadProfile() {
+    // 1. Проверка авторизации
+    if (!localStorage.getItem('currentUser')) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    
+    // 2. Отображение личных данных (ИСПРАВЛЕНЫ ID)
+    const nameElement = document.getElementById('profileName'); // Ищем по новому ID
+    const emailElement = document.getElementById('profileEmail'); // Ищем по новому ID
+
+    if (nameElement) nameElement.textContent = currentUser.name || 'Не указано'; 
+    if (emailElement) emailElement.textContent = currentUser.email || 'Не указано';
+
+
+    // 3. Отображение статистики (Трекеры)
+    const healthData = getTrackerData(); 
+    
+    // Используем ID, которые вы указали в HTML: summaryWater, summarySteps и т.д.
+    if (document.getElementById('summaryWater')) document.getElementById('summaryWater').textContent = healthData.water;
+    if (document.getElementById('summarySteps')) document.getElementById('summarySteps').textContent = healthData.steps;
+    if (document.getElementById('summarySleep')) document.getElementById('summarySleep').textContent = healthData.sleep;
+    if (document.getElementById('summaryFood')) document.getElementById('summaryFood').textContent = healthData.food;
+    if (document.getElementById('summaryWorkout')) document.getElementById('summaryWorkout').textContent = healthData.workout;
+}
 
 /*****************************
  *      НАВИГАЦИЯ HEADER
